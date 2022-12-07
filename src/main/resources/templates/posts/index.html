@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>Объявления</title>
+    <style>
+        #blurry-filter {
+            width: 100%;
+            height: 9rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100' height='100' style='filter:url(%23f)' opacity='.2'/%3E%3C/svg%3E");
+            mask: linear-gradient(black 7rem, transparent);
+            -webkit-mask: linear-gradient(black 7rem, transparent);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            pointer-events: none;
+            touch-action: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #EEE;
+            font-family: "Open Sans", sans-serif;
+            box-sizing: border-box;
+            cursor: default;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        header {
+            width: 100%;
+            height: 8rem;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        header > div {
+            width: calc(100% - 3rem);
+            max-width: 1000px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+        #title {
+            width: 100%;
+        }
+        #title .parent {
+            line-height: 1em;
+            color: #666;
+        }
+        #title .name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            mix-blend-mode: difference;
+        }
+        #reference > a {
+            color: #444;
+        }
+        #reference > a + a {
+            margin-left: 1rem;
+        }
+        .container {
+            overflow-scrolling: auto;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        h2 {
+            font-size: 28px;
+            text-align: center;
+        }
+        li {
+            border-radius: 3px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .table-header {
+            background-color: #baf708;
+            font-size: 14px;
+            color: black;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .table-row {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+        }
+        .col-1 {
+            flex-basis: 12%;
+        }
+        .col-2 {
+            flex-basis: 13%;
+        }
+        .col-3 {
+            flex-basis: 12%;
+        }
+        .col-4 {
+            flex-basis: 12%;
+        }
+        .col-5 {
+            flex-basis: 12%;
+        }
+        .col-6 {
+            flex-basis: 12%;
+        }
+        .col-7 {
+            flex-basis: 12%;
+        }
+        .col-8 {
+            flex-basis: 13%;
+        }
+        .btn-info {
+            font-size: 15px;
+            text-decoration: none;
+            color: #ff512f;
+        }
+        .btn-logout {
+            font-size: 15px;
+            margin-right: 50px;
+            background-color: #ff512f;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 110px;
+            border: none;
+            border-radius: 80px;
+        }
+        .btn:link,
+        .btn:visited {
+            font-size: 15px;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 210px;
+            border-radius: 80px;
+            transition: all .2s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+        }
+        @keyframes moveInBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="blurry-filter"></div>
+<header>
+    <div>
+        <article id="title">
+            <span class="parent">Main</span>
+            <br>
+            <span class="name">Marketplace</span>
+        </article>
+        <article>
+            <br>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-logout" value="Выход"/>
+            </form>
+        </article>
+<!--        <article id="buttons">-->
+<!--            <br>-->
+<!--            <a href="/register" class="btn btn-blue">Добавить пользователя</a>-->
+<!--        </article>-->
+    </div>
+</header>
+<div class="container">
+    <h2>Объявления</h2>
+    <ul class="responsive-table">
+        <li class="table-header">
+            <div class="col col-1">Название</div>
+            <div class="col col-2">Описание</div>
+            <div class="col col-3">Стоимость</div>
+            <div class="col col-4">Адрес</div>
+            <div class="col col-5">Автор</div>
+            <div class="col col-6">Файл</div>
+            <div class="col col-7">Категория</div>
+            <div class="col col-8">Действие</div>
+        </li>
+        <li class="table-row" th:each="el : ${post_list}" th:object="${post_list}">
+            <div class="col col-1" th:text="${el.title}"></div>
+            <div class="col col-2" th:text="${el.description}"></div>
+            <div class="col col-3" th:text="${el.price} + ' руб'"></div>
+            <div class="col col-4" th:text="${el.address}"></div>
+            <div class="col col-5" th:text="${el.author}"></div>
+            <div class="col col-6">
+                <img height="60px" width="60px" th:src="'/img/' + ${el.filename}">
+            </div>
+            <div class="col col-7" th:text="${el.category.title}"></div>
+            <div class="col col-8">
+<!--                <a type="submit" class="btn btn-delete" th:href="'/info/' + ${one_post.id} + '/del'">Удалить</a>-->
+                <a class="btn-info" th:href="'/info/' + ${el.id} + '/del'">Заблокировать</a>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

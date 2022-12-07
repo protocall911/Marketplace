@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактирование пользователя</title>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+    .container-form {
+      width: 250px;
+      height: 250px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -125px 0 0 -125px;
+    }
+    h2 {
+      font-size: 32px;
+      margin: 80px 0 40px 0;
+      text-align: center;
+    }
+    .btn:link,
+    .btn:visited {
+      font-size: 15px;
+      text-decoration: none;
+      padding: 15px;
+      text-align: center;
+      display: inline-block;
+      width: 210px;
+      border-radius: 80px;
+      transition: all .2s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .btn-blue {
+      width: 210px;
+      border-radius: 80px;
+      background-color: #007bff;
+      color: white;
+      font-size: 15px;
+      text-decoration: none;
+      padding: 15px;
+      text-align: center;
+      display: inline-block;
+      transition: all .2s;
+      border: none;
+    }
+    @keyframes moveInBottom {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body>
+<h2>Редактировать пользователя</h2>
+
+<form method="post">
+  <div class="container-form">
+    <label>Логин</label>
+    <input type="text" th:value="*{user_object.username}" name="username">
+    <p/>
+    <!--    <label>Роли</label>-->
+    <div th:each="role: ${roles}">
+      <p/>
+      <input type="checkbox" th:id="*{role}" th:name="${'roles[]'}"
+             th:value="${role}" th:checked="${#lists.contains(user_object.roles, role)}">
+
+      <label th:text="${role}"/>
+    </div>
+    <p/>
+    <div>
+      <input type="submit" class="btn btn-blue" value="Сохранить изменения"/>
+    </div>
+  </div>
+</form>
+</body>
+</html>

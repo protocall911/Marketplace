@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a06….png">
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec3494….ico">
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b….svg" color="#111">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
+    <style>
+        #blurry-filter {
+            width: 100%;
+            height: 9rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100' height='100' style='filter:url(%23f)' opacity='.2'/%3E%3C/svg%3E");
+            mask: linear-gradient(black 7rem, transparent);
+            -webkit-mask: linear-gradient(black 7rem, transparent);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            pointer-events: none;
+            touch-action: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #EEE;
+            font-family: "Open Sans", sans-serif;
+            box-sizing: border-box;
+            cursor: default;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        header {
+            width: 100%;
+            height: 8rem;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        header > div {
+            width: calc(100% - 3rem);
+            max-width: 800px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+        #title {
+            width: 100%;
+        }
+        #title .parent {
+            line-height: 1em;
+            color: #666;
+        }
+        #title .name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            mix-blend-mode: difference;
+        }
+        #reference {
+            display: flex;
+        }
+        #reference > a {
+            color: #444;
+        }
+        #reference > a + a {
+            margin-left: 1rem;
+        }
+        .btn-info {
+            font-size: 15px;
+            text-decoration: none;
+            color: #007bff;
+            margin-left: 75px;
+        }
+        .btn-logout {
+            font-size: 15px;
+            margin-right: 50px;
+            background-color: #ff512f;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 110px;
+            border: none;
+            border-radius: 80px;
+        }
+        .btn-basket {
+            font-size: 15px;
+            margin-right: 50px;
+            background-color: #baf708;
+            color: #666;
+            width: 110px;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            border: none;
+            border-radius: 80px;
+            text-align: center;
+        }
+        .btn:link,
+        .btn:visited {
+            font-size: 15px;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 210px;
+            border-radius: 80px;
+            transition: all .2s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+        }
+        @keyframes moveInBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+        main, #folders {
+            width: calc(100% - 3rem);
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 1.5rem;
+        }
+        main > article {
+            width: 100%;
+            height: 32px;
+            padding: 1rem;
+            background-color: #FFF;
+        }
+        main > .post-view {
+            width: 100%;
+            margin: 0;
+            background-color: #FFF;
+            background-size: cover;
+            border-radius: 1rem;
+            transition: all 100ms ease-out;
+        }
+        .post-img {
+            border-radius: 1rem;
+            height: 230px;
+            width: 230px;
+            margin: 10px;
+        }
+        main > .post-view:hover {
+            box-shadow: 0 16px 16px -4px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
+        }
+        #folders {
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        #folders > article {
+            width: 100%;
+            height: 4rem;
+            padding: 0 1.5rem;
+            background-color: #FFF;
+            border-radius: 1rem;
+            line-height: 4rem;
+            transition: all 100ms ease-out;
+        }
+        #posts > article {
+            font-size: 14px;
+            margin: 10px;
+        }
+        #folders > article:hover {
+            box-shadow: 0 16px 16px -4px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+        }
+        footer {
+            width: 100%;
+            height: 8rem;
+        }
+        .form-filter, .input-filter, .caret {
+            margin: auto;
+        }
+        .form-filter {
+            position: relative;
+            width: 100%;
+            max-width: 120em;
+        }
+        .input-filter, .caret {
+            display: block;
+            transition: all calc(1s * 0.5) linear;
+        }
+        .input-filter {
+            background: transparent;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0.25em inset;
+            caret-color: #255ff4;
+            width: 2em;
+            height: 2em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .input-filter:focus, .input-filter:valid {
+            background: #ffffff;
+            border-radius: 0.25em;
+            box-shadow: none;
+            padding: 0.75em 1em;
+            transition-duration: calc(1s * 0.25);
+            transition-delay: calc(1s * 0.25);
+            width: 100%;
+            height: 3em;
+        }
+        .input-filter:focus {
+            animation: showCaret 1s steps(1);
+            outline: transparent;
+        }
+        .input-filter:focus + .caret, .input-filter:valid + .caret {
+            animation: handleToCaret 1s linear;
+            background: transparent;
+            width: 1px;
+            height: 1.5em;
+            transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+        }
+        .input-filter::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+        .label-input {
+            color: #e3e4e8;
+            overflow: hidden;
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+        .caret {
+            background: currentColor;
+            border-radius: 0 0 0.125em 0.125em;
+            margin-bottom: -0.6em;
+            width: 0.25em;
+            height: 1em;
+            transform: translate(0,-1em) rotate(-45deg) translate(0,0.875em);
+            transform-origin: 50% 0;
+        }
+        @keyframes showCaret {
+            from {
+                caret-color: transparent;
+            }
+            to {
+                caret-color: #255ff4;
+            }
+        }
+        @keyframes handleToCaret {
+            from {
+                background: currentColor;
+                width: 0.25em;
+                height: 1em;
+                transform: translate(0,-1em) rotate(-45deg) translate(0,0.875em);
+            }
+            25% {
+                background: currentColor;
+                width: 0.25em;
+                height: 1em;
+                transform: translate(0,-1em) rotate(-180deg) translate(0,0.875em);
+            }
+            50%, 62.5% {
+                background: #255ff4;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,2.5em);
+            }
+            75%, 99% {
+                background: #255ff4;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+            }
+            87.5% {
+                background: #255ff4;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,0.125em);
+            }
+            to {
+                background: transparent;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+            }
+        }
+    </style>
+</head>
+<body translate="no">
+<div id="blurry-filter"></div>
+<header>
+    <div>
+        <article id="title">
+            <span class="parent">Main</span>
+            <br>
+            <span class="name">Marketplace</span>
+        </article>
+        <article>
+            <br>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-logout" value="Выход"/>
+            </form>
+        </article>
+        <article id="buttons">
+            <br>
+            <a href="/post/add" class="btn btn-blue">Разместить объявление</a>
+        </article>
+    </div>
+</header>
+<section></section>
+<section id="folders">
+    <br>
+    <form class="form-filter" method="get" action="/filter">
+        <label class="label-input" for="search">Найти</label>
+        <input class="input-filter" id="search" name="title" type="search" pattern=".*\S.*" required>
+        <span class="caret"></span>
+    </form>
+<!--    <article >Одежда, обувь</article>-->
+<!--    <article>Электроника</article>-->
+<!--    <article>Красота и здоровье</article>-->
+</section>
+<main>
+    <div class="post-view" th:each="element : ${post_list}">
+        <div id="posts">
+            <img class="post-img" th:src="'/img/' + ${element.filename}">
+            <article  th:text="${element.title}"></article>
+            <article  th:text="${element.price} + ' ' + '₽'"></article>
+            <article  th:text="${element.address}"></article>
+            <a class="btn-info" th:href="'/info/' + ${element.id}">Подробнее</a>
+            <br><br>
+        </div>
+    </div>
+</main>
+<footer></footer>
+</body>
+</html>

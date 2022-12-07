@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Пользователи</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+    .container {
+      overflow-scrolling: auto;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    h2 {
+      font-size: 32px;
+      margin: 80px 0 40px 0;
+      text-align: center;
+    }
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn:link,
+    .btn:visited {
+      font-size: 15px;
+      text-decoration: none;
+      padding: 15px;
+      text-align: center;
+      display: inline-block;
+      width: 210px;
+      border-radius: 80px;
+      transition: all .2s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .btn-blue {
+      margin-left: 500px;
+      background-color: #007bff;
+      color: white;
+    }
+    @keyframes moveInBottom {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 th:text="'Пользователь: ' + ${user_object.username}"></h2>
+
+  <div class="container">
+    <p th:text="'Роли: ' + ${user_object.roles}"></p>
+    <p th:text="${user_object.active} == True ? 'Пользователь: Активный' : 'Пользователь: Неактивный'"></p>
+
+    <div class="btn-body">
+      <div class="btn-container">
+        <a type="submit" class="btn btn-blue" th:href="'/admin/' + ${user_object.id} + '/update'">Редактировать</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

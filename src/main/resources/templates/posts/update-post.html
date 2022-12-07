@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование объявления</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            color: #1a1f36;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Ubuntu,sans-serif;
+        }
+        body {
+            min-height: 100%;
+            background-color: #ffffff;
+        }
+        h1 {
+            letter-spacing: -1px;
+        }
+        a {
+            color: #5469d4;
+            text-decoration: unset;
+        }
+        .padding-bottom--24 {
+            padding-bottom: 24px;
+        }
+        .padding-horizontal--48 {
+            padding: 48px;
+        }
+        .padding-bottom--15 {
+            padding-bottom: 15px;
+        }
+        .formbg {
+            margin: 0px auto;
+            width: 100%;
+            max-width: 448px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: rgba(60, 66, 87, 0.12) 0px 7px 14px 0px, rgba(0, 0, 0, 0.12) 0px 3px 6px 0px;
+        }
+        span {
+            display: block;
+            font-size: 20px;
+            line-height: 28px;
+            color: #1a1f36;
+        }
+        label {
+            margin-bottom: 10px;
+        }
+        .reset-pass a,label {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+        }
+        .reset-pass > a {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .field input {
+            font-size: 16px;
+            line-height: 28px;
+            padding: 8px 16px;
+            width: 100%;
+            min-height: 44px;
+            border: unset;
+            border-radius: 4px;
+            outline-color: rgb(84 105 212 / 0.5);
+            background-color: rgb(255, 255, 255);
+            box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+        }
+        input[type="submit"] {
+            background-color: rgb(84, 105, 212);
+            box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0.12) 0px 1px 1px 0px,
+            rgb(84, 105, 212) 0px 0px 0px 1px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+            rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .field-checkbox input {
+            width: 20px;
+            height: 15px;
+            margin-right: 5px;
+            box-shadow: unset;
+            min-height: unset;
+        }
+        .field-checkbox label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+        a.ssolink {
+            display: block;
+            text-align: center;
+            font-weight: 600;
+        }
+        .footer-link span {
+            font-size: 14px;
+            text-align: center;
+        }
+        .listing a {
+            color: #697386;
+            font-weight: 600;
+            margin: 0 10px;
+        }
+        @keyframes animationLeftRight {
+            0% {
+                transform: translateX(0px);
+            }
+            50% {
+                transform: translateX(1000px);
+            }
+            100% {
+                transform: translateX(0px);
+            }
+        }
+        @keyframes animationRightLeft {
+            0% {
+                transform: translateX(0px);
+            }
+            50% {
+                transform: translateX(-1000px);
+            }
+            100% {
+                transform: translateX(0px);
+            }
+        }
+        #blurry-filter {
+            width: 100%;
+            height: 9rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100' height='100' style='filter:url(%23f)' opacity='.2'/%3E%3C/svg%3E");
+            mask: linear-gradient(black 7rem, transparent);
+            -webkit-mask: linear-gradient(black 7rem, transparent);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            pointer-events: none;
+            touch-action: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #EEE;
+            font-family: "Open Sans", sans-serif;
+            box-sizing: border-box;
+            cursor: default;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        header {
+            width: 100%;
+            height: 8rem;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        header > div {
+            width: calc(100% - 3rem);
+            max-width: 800px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+        #title-header {
+            width: 100%;
+        }
+        #title-header .parent {
+            line-height: 1em;
+            color: #666;
+        }
+        #title-header .name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            mix-blend-mode: difference;
+        }
+        #reference > a {
+            color: #444;
+        }
+        #reference > a + a {
+            margin-left: 1rem;
+        }
+        h2 {
+            font-size: 24px;
+            text-align: center;
+        }
+        .padding-bottom--15 {
+            padding-bottom: 15px;
+        }
+        .padding-bottom--24 {
+            padding-bottom: 24px;
+        }
+        .padding-horizontal--48 {
+            padding: 48px;
+        }
+        .btn-logout {
+            font-size: 15px;
+            margin-right: 50px;
+            background-color: #ff512f;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 110px;
+            border: none;
+            border-radius: 80px;
+        }
+        .btn:link,
+        .btn:visited {
+            font-size: 15px;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+            width: 210px;
+            border-radius: 80px;
+            transition: all .2s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+        }
+        @keyframes moveInBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="blurry-filter"></div>
+<header>
+    <div>
+        <article id="title-header">
+            <span class="parent">Main</span>
+            <br>
+            <span class="name">Marketplace</span>
+        </article>
+        <article>
+            <br>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-logout" value="Выход"/>
+            </form>
+        </article>
+    </div>
+</header>
+<div>
+    <div class="formbg-outer">
+        <div class="formbg">
+            <div class="formbg-inner padding-horizontal--48">
+                <span class="padding-bottom--15" th:text="'Редактирование объявления ' + ${post.title}"></span>
+                <form id="stripe-login" method="post" th:each="el : ${post}" th:object="${post}" enctype="multipart/form-data">
+                    <div class="field padding-bottom--24">
+                        <label for="title" class="placeholder">Название</label>
+                        <input th:field="*{title}" th:value="${post.title}" id="title" type="text" name="title" placeholder=" "/>
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;"></div>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label for="description" class="placeholder">Описание</label>
+                        <input th:field="*{description}" th:value="${post.description}" id="description" type="text" name="description" placeholder=" "/>
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: red;"></div>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label for="price" class="placeholder">Стоимость</label>
+                        <input th:field="*{price}" th:value="${post.price}" id="price" type="number" name="price" placeholder=" "/>
+                        <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: red;"></div>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label for="address" class="placeholder">Адрес</label>
+                        <input th:field="*{address}" th:value="${post.address}" id="address" type="text" name="address" placeholder=" "/>
+                        <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color: red;"></div>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label for="file">Фото</label>
+                        <input th:value="${post.filename}" type="file" name="file" id="file">
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <label for="category" class="placeholder">Выберите категорию</label>
+                        <select id="category"  name="title" th:field="*{category}">
+                            <option th:each="elem : ${categories}" th:text="${elem.title}" th:value="${elem.id}"></option>
+                        </select>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <input  type="submit" value="Сохранить изменения">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
